@@ -6,7 +6,7 @@ from app import news
 import os
 
 
-#definiera filsökväg till content
+
 static_dir = os.path.join(os.getcwd(), "static", "Schmeck")
 
 
@@ -15,7 +15,7 @@ static_dir = os.path.join(os.getcwd(), "static", "Schmeck")
 def index():
     return send_from_directory(static_dir, "index.html")
 
-#Routes för asset-hämtning (Javascript, CSS, Media)
+
 @webapp.route("/css/<filename>")
 def get_css(filename):
     return send_from_directory(os.path.join(static_dir, "css"), filename)
@@ -24,22 +24,22 @@ def get_css(filename):
 def get_js(filename):
     return send_from_directory(os.path.join(static_dir, "js"), filename)
 
-@webapp.route("/media/<file_path>")
+@webapp.route("/mediaApi/<file_path>")
 def get_media(file_path):
     return send_from_directory(os.path.join(static_dir, "media"), file_path)
 
-@webapp.route("/news/all")
+@webapp.route("/newsApi/all")
 def get_news():
     return jsonify(news.get_news(None))
 
-@webapp.route("/news/<id>")
+@webapp.route("/newsApi/<id>")
 def get_news_by_id(id):
     try:
         return jsonify(news.get_news(id)), 201
     except:
         return "PROBLEM!", 500
 
-@webapp.route("/news/upload")
+@webapp.route("/newsApi/upload")
 def add_news():
     
     resp = news.save_to_db(request.json)
@@ -48,3 +48,10 @@ def add_news():
     else:
         return "PROBLEM", 500
 
+@webapp.route("/newsApi/delete/<id>")
+def delete_news(id):
+    resp = news.delete_news(id)
+
+@webapp.route("/news/edit/<id>")
+def edit_page():
+    return send_from_directory(static_dir, "edit.html")

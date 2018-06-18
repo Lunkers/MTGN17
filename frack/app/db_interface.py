@@ -2,7 +2,7 @@ import pymysql
 
 
 
-conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="", db="mysql", autocommit= True) #ersätt med ordentliga creds i framtiden
+conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="", db="mysql", autocommit= True) 
 conn.autocommit(True)
 cursor = conn.cursor()
 
@@ -32,4 +32,8 @@ def add_news(dict):
         sql = "INSERT INTO mtgn18.news (author, headline, text, tags) VALUES(%s, %s, %s, %s)"
         cursor.execute(sql, (dict["author"], dict["headline"], dict["text"], dict["tags"]))
         
-        return True
+
+
+def delete_news(id):
+    sql = "DELETE from mtgn18.news WHERE id = %s"
+    cursor.execute(sql, id)
