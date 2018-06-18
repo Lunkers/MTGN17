@@ -1,10 +1,6 @@
 import app.db_interface
 
     
-def as_news(dict):
-    #funktion för att konvertera dictionary till nyhetsobjekt
-    return News(dict["author"], dict["headline"], 
-                dict["text"], dict["tags"])
 
 def get_news(id):
     return app.db_interface.get_news(id)
