@@ -1,6 +1,8 @@
 import pymysql
 
-conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="", db="mysql", autocommit= True)
+
+
+conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="", db="mysql", autocommit= True) #ersätt med ordentliga creds i framtiden
 conn.autocommit(True)
 cursor = conn.cursor()
 
@@ -31,6 +33,3 @@ def add_news(dict):
         cursor.execute(sql, (dict["author"], dict["headline"], dict["text"], dict["tags"]))
         
         return True
-
-if __name__ == "__main__":
-    print(get_news(1))

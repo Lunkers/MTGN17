@@ -34,7 +34,10 @@ def get_news():
 
 @webapp.route("/news/<id>")
 def get_news_by_id(id):
-    return jsonify(news.get_news(id))
+    try:
+        return jsonify(news.get_news(id)), 201
+    except:
+        return "PROBLEM!", 500
 
 @webapp.route("/news/upload")
 def add_news():
