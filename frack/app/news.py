@@ -22,3 +22,10 @@ def delete_news(id):
         return True
     except:
         return False
+
+def edit_news(id, dict):
+    try:
+        interface.edit_news(id, dict)
+        return True
+    except:
+        return False

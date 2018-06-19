@@ -1,57 +1,83 @@
 #Importera moduler
-from app.webapp import app as webapp
+from app import app
 from flask import jsonify, request, send_from_directory
 import json
-from app import news
+from app import db
 import os
+from app.models import News
 
 
 
-static_dir = os.path.join(os.getcwd(), "static", "Schmeck")
+STATIC_DIR = os.path.join(os.getcwd(), "static", "Schmeck")
 
 
 #Definiera olika URL-er och vad de leder till
-@webapp.route("/")
+@app.route("/")
 def index():
-    return send_from_directory(static_dir, "index.html")
+    return send_from_directory(STATIC_DIR, "index.html")
 
-
-@webapp.route("/css/<filename>")
+#ladda CSS
+@app.route("/css/<filename>")
 def get_css(filename):
-    return send_from_directory(os.path.join(static_dir, "css"), filename)
+    return send_from_directory(os.path.join(STATIC_DIR, "css"), filename)
 
-@webapp.route("/js/<filename>")
+#ladda JavaScript
+@app.route("/js/<filename>")
 def get_js(filename):
-    return send_from_directory(os.path.join(static_dir, "js"), filename)
+    return send_from_directory(os.path.join(STATIC_DIR, "js"), filename)
 
-@webapp.route("/mediaApi/<file_path>")
+#ladda media (bild, film, osv)
+@app.route("/mediaApi/<file_path>")
 def get_media(file_path):
-    return send_from_directory(os.path.join(static_dir, "media"), file_path)
+    return send_from_directory(os.path.join(STATIC_DIR, "media"), file_path)
 
-@webapp.route("/newsApi/all")
+@app.route("/news")
+def news_page():
+    return send_from_directory(STATIC_DIR, "news.html")
+
+@app.route("/news/<id>")
+def news_page_specific(id):
+    return send_from_directory(STATIC_DIR, "news.html")
+
+@app.route("/news/edit/<id>")
+def edit_page(id):
+    return send_from_directory(STATIC_DIR, "edit.html")
+
+@app.route("/newsApi/all")
 def get_news():
-    return jsonify(news.get_news(None))
+    news_list = News.query.all()
+    print(news_list)
+    res_list =[]
+    for news in news_list:
+        res_list.append(news.as_dictionary())
+    return jsonify(res_list)
 
-@webapp.route("/newsApi/<id>")
+@app.route("/newsApi/<id>")
 def get_news_by_id(id):
     try:
         return jsonify(news.get_news(id)), 201
     except:
         return "PROBLEM!", 500
 
-@webapp.route("/newsApi/upload")
+@app.route("/newsApi/upload")
 def add_news():
-    
-    resp = news.save_to_db(request.json)
-    if resp:
-        return "WOO DET FUNKADE", 201
-    else:
-        return "PROBLEM", 500
+    req_json = request.json
+    print(req_json)
+    n = News(author = req_json["author"])
+    db.session.add(n)
+    db.session.commit()
+    return jsonify(req_json)
 
-@webapp.route("/newsApi/delete/<id>")
+
+@app.route("/newsApi/delete/<id>")
 def delete_news(id):
     resp = news.delete_news(id)
+    if resp:
+        return "nyheten med id " + id + " raderades!", 200
+    else:
+        return "något gick fel", 500
 
-@webapp.route("/news/edit/<id>")
-def edit_page():
-    return send_from_directory(static_dir, "edit.html")
+@app.route("/newsAPI/edit/<id>")
+def edit_news(id):
+    resp = news.edit_news(id, request.json)
+
