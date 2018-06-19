@@ -1,10 +1,12 @@
 import pymysql
 
 
-
-conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="", db="mysql", autocommit= True) 
-conn.autocommit(True)
-cursor = conn.cursor()
+try:
+    conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="", db="mysql", autocommit= True) 
+    conn.autocommit(True)
+    cursor = conn.cursor()
+except:
+    print("kunde inte nå databasen!")
 
 #hämta nyheter; antigen specifikt id eller alla
 def get_news(id):

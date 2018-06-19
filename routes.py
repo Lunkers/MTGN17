@@ -7,26 +7,40 @@ import os
 
 
 
-static_dir = os.path.join(os.getcwd(), "static", "Schmeck")
+STATIC_DIR = os.path.join(os.getcwd(), "static", "Schmeck")
 
 
 #Definiera olika URL-er och vad de leder till
 @webapp.route("/")
 def index():
-    return send_from_directory(static_dir, "index.html")
+    return send_from_directory(STATIC_DIR, "index.html")
 
-
+#ladda CSS
 @webapp.route("/css/<filename>")
 def get_css(filename):
-    return send_from_directory(os.path.join(static_dir, "css"), filename)
+    return send_from_directory(os.path.join(STATIC_DIR, "css"), filename)
 
+#ladda JavaScript
 @webapp.route("/js/<filename>")
 def get_js(filename):
-    return send_from_directory(os.path.join(static_dir, "js"), filename)
+    return send_from_directory(os.path.join(STATIC_DIR, "js"), filename)
 
+#ladda media (bild, film, osv)
 @webapp.route("/mediaApi/<file_path>")
 def get_media(file_path):
-    return send_from_directory(os.path.join(static_dir, "media"), file_path)
+    return send_from_directory(os.path.join(STATIC_DIR, "media"), file_path)
+
+@webapp.route("/news")
+def news_page():
+    return send_from_directory(STATIC_DIR, "news.html")
+
+@webapp.route("/news/<id>")
+def news_page_specific(id):
+    return send_from_directory(STATIC_DIR, "news.html")
+
+@webapp.route("/news/edit/<id>")
+def edit_page(id):
+    return send_from_directory(STATIC_DIR, "edit.html")
 
 @webapp.route("/newsApi/all")
 def get_news():
@@ -60,6 +74,3 @@ def delete_news(id):
 def edit_news(id):
     resp = news.edit_news(id, request.json)
 
-@webapp.route("/news/edit/<id>")
-def edit_page():
-    return send_from_directory(static_dir, "edit.html")
