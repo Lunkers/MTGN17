@@ -15,7 +15,8 @@ class News(db.Model):
             "id" : self.id,
             "author" : self.author,
             "text" : self.text,
-            "tags": self.tags
+            "tags": self.tags,
+            "headline" :self.headline
         }
 
         return news_dict

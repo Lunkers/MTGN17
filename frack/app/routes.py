@@ -54,16 +54,17 @@ def get_news():
 
 @app.route("/newsApi/<id>")
 def get_news_by_id(id):
-    try:
-        return jsonify(news.get_news(id)), 201
-    except:
-        return "PROBLEM!", 500
+    news_resp = News.query.get(id)
+    
+    return jsonify(news_resp.as_dictionary()), 201
 
-@app.route("/newsApi/upload")
+@app.route("/newsApi/upload", methods=["POST"])
 def add_news():
     req_json = request.json
-    print(req_json)
-    n = News(author = req_json["author"])
+    n = News(author = req_json["author"],
+            tags = req_json["tags"],
+            headline = req_json["headline"],
+            text = req_json["text"])
     db.session.add(n)
     db.session.commit()
     return jsonify(req_json)
@@ -71,13 +72,19 @@ def add_news():
 
 @app.route("/newsApi/delete/<id>")
 def delete_news(id):
-    resp = news.delete_news(id)
-    if resp:
-        return "nyheten med id " + id + " raderades!", 200
-    else:
-        return "något gick fel", 500
+    News.query.filter(News.id == id).delete()
+    db.session.commit()
+    return "Nyhet med ID: " + id +" raderades!", 200
 
-@app.route("/newsAPI/edit/<id>")
+@app.route("/newsApi/edit/<id>", methods=["POST"])
 def edit_news(id):
-    resp = news.edit_news(id, request.json)
+    news_item = News.query.get(id)
+    req_json = request.json
+    news_item.author = req_json["author"]
+    news_item.headline = req_json["headline"]
+    news_item.text = req_json["text"]
+    news_item.tags = req_json["tags"]
+    db.session.commit()
+    return "uppdaterade nyhet med ID: " + id, 201
+    
 
