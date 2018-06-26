@@ -5,6 +5,8 @@ import json
 from app import db
 import os
 from app.models import News
+import app.news_functions as news_functions
+from sqlalchemy import desc
 
 
 
@@ -45,46 +47,23 @@ def edit_page(id):
 
 @app.route("/newsApi/all")
 def get_news():
-    news_list = News.query.all()
-    print(news_list)
-    res_list =[]
-    for news in news_list:
-        res_list.append(news.as_dictionary())
-    return jsonify(res_list)
+    return news_functions.get_all_news()
 
 @app.route("/newsApi/<id>")
 def get_news_by_id(id):
-    news_resp = News.query.get(id)
-    
-    return jsonify(news_resp.as_dictionary()), 201
+    return get_news_by_id(id), 201
 
 @app.route("/newsApi/upload", methods=["POST"])
 def add_news():
-    req_json = request.json
-    n = News(author = req_json["author"],
-            tags = req_json["tags"],
-            headline = req_json["headline"],
-            text = req_json["text"])
-    db.session.add(n)
-    db.session.commit()
-    return jsonify(req_json)
+    return news_functions.add_news(request.json), 200
 
 
 @app.route("/newsApi/delete/<id>")
 def delete_news(id):
-    News.query.filter(News.id == id).delete()
-    db.session.commit()
-    return "Nyhet med ID: " + id +" raderades!", 200
+    return news_functions.delete_news(id), 200
 
 @app.route("/newsApi/edit/<id>", methods=["POST"])
 def edit_news(id):
-    news_item = News.query.get(id)
-    req_json = request.json
-    news_item.author = req_json["author"]
-    news_item.headline = req_json["headline"]
-    news_item.text = req_json["text"]
-    news_item.tags = req_json["tags"]
-    db.session.commit()
-    return "uppdaterade nyhet med ID: " + id, 201
+    return news_functions.edit_news(id, request.json), 201
     
 
