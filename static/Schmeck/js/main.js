@@ -172,6 +172,9 @@ $(document).ready(function() {
         '/admin/upload':function() {
             renderTemplate("#content", "/templates/upload.html");
             renderTemplate("#sidebar", "/templates/sidebar.html", {currentPage: "admin", user: Frack.CurrentUser});
+        },
+        '/admin/upload_blandaren':function() {
+            renderTemplate("#content", "/templates/blandaren_upload.html");
         }
     });
 

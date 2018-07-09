@@ -22,7 +22,6 @@ def upload_media(request):
             db.session.add(new_img)
 
     latest_videos = request.form.getlist("videos")
-    print(latest_videos == None)
     if latest_videos is not None:
         for video in latest_videos:
             embed_link, thumbnail = handle_video(video)

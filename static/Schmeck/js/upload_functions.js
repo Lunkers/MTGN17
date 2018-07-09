@@ -9,12 +9,10 @@ uploadMedia = function() {
     var links = $("#videos").val();
     var linkList = links.split(","); 
     linkList = linkList.filter(v =>v!="");
-    console.log(linkList);
     var form_data = new FormData();
 
     for (var i = 0; i < files.length; i++ ){
         var file = files[i];
-        console.log(typeof(file));
         form_data.append("files", file, file.name)
     }
     form_data.append("uploadedby", name);
@@ -33,8 +31,31 @@ uploadMedia = function() {
         data: form_data,
         contentType: false, 
         processData:false,
-        success: function(resp){
-            alert(JSON(resp));
+        success: function(){
+            window.location.href = "/media";
         }
+    })
+};
+
+uploadDocument = function(){
+    var fileSelect = document.getElementById("files");
+    var files = fileSelect.files;
+    
+
+    var form_data = new FormData();
+
+    for (var j = 0; j < files.length; j++){
+        var file = files[j];
+        console.log(file);
+        form_data.append("files", file, file.name);
+    }
+
+    $.ajax({
+        url: "/api/blandaren",
+        type: "POST",
+        data: form_data,
+        contentType: false,
+        processData: false,
+       
     })
 };

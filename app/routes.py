@@ -8,6 +8,7 @@ from app.models.news import News
 import app.news_functions as news_functions
 import app.image_functions as image_functions
 import app.user_functions as user_functions
+import app.document_functions as document_functions
 from sqlalchemy import desc
 from app.authentication import requires_auth, requires_auth_token, check_auth
 
@@ -43,6 +44,20 @@ def get_images(filename):
 @app.route("/media/<file_path>")
 def get_media(file_path):
     return send_from_directory(os.path.join(STATIC_DIR, "media"), file_path)
+
+@app.route("/blandaren/<file_path>")
+def get_blandaren(file_path):
+    return send_from_directory(os.path.join(STATIC_DIR, "bländaren"), file_path)
+
+@app.route("/api/blandaren", methods = ["GET", "POST"])
+def blandar_route():
+    if request.method == "POST":
+        document_functions.upload_document(request)
+        return jsonify({"message":"fil(er) laddades upp!"}), 200
+    if request.method == "GET":
+        document_response = document_functions.get_documents()
+        print(document_response)
+        return jsonify(document_response), 200
 
 @app.route("/api/media", methods = ["GET", "POST"]) #Hämta media eller ladda upp media
 def media_path():
