@@ -4,8 +4,8 @@
     var shownMedia;
     var weeks;
     var events;
-    const API_URL = "/api/media";
-    const MEDIA_URL = "/media/";
+    var API_URL = "/api/media";
+    var MEDIA_URL = "/media/";
     $(document).ready(function(){
        /*fetch(API_URL).then((response) => response.json())
        .then((jsondata) => {allMedia = jsondata
@@ -57,6 +57,7 @@
                 img.attr("class", "media-thumbnail");
             }
             if(mediaObj.type === "video"){
+                console.log(mediaObj)
                 var img = $(('<img id="' + mediaObj.video_link + '">'))
                 img.attr("src", mediaObj.thumbnail);
                 img.attr("class", "media-thumbnail");
