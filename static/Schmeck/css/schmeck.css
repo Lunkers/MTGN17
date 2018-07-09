@@ -360,3 +360,13 @@ p, a {
     max-width: 200px;
     background-color: #a5a5a5;
 }
+
+.active-media{
+    height: 720px;
+}
+
+iframe{
+    width:100%;
+    height: 56.25%;
+    background: red;
+}

@@ -75,11 +75,15 @@
         if(content.type === "video"){
             var iframe = $(('<iframe id="active">'));
             iframe.attr("src", "http://" + content.video_link);
+            iframe.attr("frameborder", "0");
+
             $(".active-media").append(iframe);
         }
         if(content.type === "image"){
             var img = $(('<img>'));
             img.attr("src", MEDIA_URL + content.filename);
+            img.attr("height", $(".active-media").height());
+            img.attr("width", $(".media-container").width())
             $(".active-media").append(img);
         }
     }
