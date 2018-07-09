@@ -84,13 +84,19 @@ def generate_thumbnail(filename):
 
 def get_weeks():
     output = []
-    for value in db.session.query(Image.week).distinct().order_by(Image.week.asc()):
+    q1 = db.session.query(Image.week)
+    q2 = db.session.query(Video.week)
+    q3 = q1.union(q2)
+    for value in q3.distinct():
         output.append(value[0])
     return output
 
 def get_events():
     output = []
-    for value in db.session.query(Image.event).distinct().order_by(Image.week.asc()):
+    q1 = db.session.query(Image.event)
+    q2 = db.session.query(Video.event)
+    q3 = q1.union(q2)
+    for value in q3.distinct():
         output.append(value[0])
     return output
 
