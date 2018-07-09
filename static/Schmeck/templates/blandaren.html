@@ -20,11 +20,10 @@
         for (var i = 0; i < documentArray.length; i++){
             var docObj = documentArray[i];
             console.log(documentArray[i]);
-            var iframe = $(('<iframe>'));
-            iframe.attr("src", DOC_URL + docObj.filename);
-            iframe.attr("scrolling", "no");
-            documentContainer.append(iframe);
-    
+            var link = $(('<a>'))
+            link.attr("href", DOC_URL + docObj.filename)
+            link.text(docObj.filename);
+            documentContainer.append(link);
         }
     }
 </script>

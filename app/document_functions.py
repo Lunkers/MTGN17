@@ -2,7 +2,6 @@ import os
 from sqlalchemy import desc, asc
 from app.models.blandaren import Document
 from app import db
-import img2pdf
 
 
 SAVE_FOLDER = os.path.join(os.getcwd(), "static", "Schmeck", "blandaren")
@@ -13,6 +12,7 @@ def upload_document(request):
     if files is not None:
         for document in files:
             filename = document.filename
+            filename = filename.replace(" ", "_")
             print(filename)
             document.save(os.path.join(SAVE_FOLDER, filename))
             new_doc = Document(filename = filename)

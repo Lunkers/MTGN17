@@ -47,7 +47,7 @@ def get_media(file_path):
 
 @app.route("/blandaren/<file_path>")
 def get_blandaren(file_path):
-    return send_from_directory(os.path.join(STATIC_DIR, "bländaren"), file_path)
+    return send_from_directory(os.path.join(STATIC_DIR, "blandaren"), file_path)
 
 @app.route("/api/blandaren", methods = ["GET", "POST"])
 def blandar_route():
