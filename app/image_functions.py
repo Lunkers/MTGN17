@@ -25,9 +25,11 @@ def upload_media(request):
     print(latest_videos == None)
     if latest_videos is not None:
         for video in latest_videos:
-            new_vid = Video(video_link = video, uploaded_by = name,
+            embed_link, thumbnail = handle_video(video)
+            new_vid = Video(video_link = embed_link, uploaded_by = name,
             event = event,
-            week = week)
+            week = week,
+            thumbnail = thumbnail)
             db.session.add(new_vid)
 
 
@@ -92,3 +94,11 @@ def get_events():
     for value in db.session.query(Image.event).distinct().order_by(Image.week.asc()):
         output.append(value[0])
     return output
+
+def handle_video(video_link):
+    video_id = video_link.split("v=")[1]
+    print(video_id)
+    embed_link = "youtube.com/embed/" + video_id
+    thumbnail = "http://img.youtube.com/vi/" + video_id + "/maxresdefault.jpg"
+
+    return embed_link, thumbnail

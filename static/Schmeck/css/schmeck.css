@@ -354,3 +354,9 @@ p, a {
 #snapcode-link-kph, #snapcode-link-inpho, #snapcode-link-arr {
     cursor: pointer;
 }
+
+.media-thumbnail{
+    max-height: 200px;
+    max-width: 200px;
+    background-color: #a5a5a5;
+}

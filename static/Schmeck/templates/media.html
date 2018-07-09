@@ -51,14 +51,37 @@
         mediaList.empty();
         for (var i = 0; i < mediaArray.length; i++){
             var mediaObj = mediaArray[i];
-            var img = $(('<img id="' + mediaObj.filename +'">'));
-            img.attr("src", MEDIA_URL + mediaObj.thumbnail);
+            if (mediaObj.type === "image"){
+                var img = $(('<img id="' + mediaObj.filename +'">'));
+                img.attr("src", MEDIA_URL + mediaObj.thumbnail);
+                img.attr("class", "media-thumbnail");
+            }
+            if(mediaObj.type === "video"){
+                var img = $(('<img id="' + mediaObj.video_link + '">'))
+                img.attr("src", mediaObj.thumbnail);
+                img.attr("class", "media-thumbnail");
+            }   
             mediaList.append(img);
         }
     }
     $("#week-select").change(() => {filterMedia()});
     $("#event-select").change(() => {filterMedia()})
-
+    $(".media-list").on('click', '.media-thumbnail', (event) => updateActiveMedia(event.target.id))
+    updateActiveMedia = function(mediaId){
+        console.log(JSON.stringify(mediaId));
+        var content = allMedia.find(m => m.filename === mediaId || m.video_link === mediaId);
+        $(".active-media").empty();
+        if(content.type === "video"){
+            var iframe = $(('<iframe id="active">'));
+            iframe.attr("src", "http://" + content.video_link);
+            $(".active-media").append(iframe);
+        }
+        if(content.type === "image"){
+            var img = $(('<img>'));
+            img.attr("src", MEDIA_URL + content.filename);
+            $(".active-media").append(img);
+        }
+    }
 
     filterMedia = function(){
         selectedWeek = $("#week-select option:selected").val();
@@ -88,6 +111,9 @@
     </div>
     <br>
     <div class="media-list">
+
+    </div>
+    <div class="active-media">
 
     </div>
 </body>
