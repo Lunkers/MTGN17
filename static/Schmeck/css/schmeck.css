@@ -71,6 +71,7 @@ p, a {
 .bookcontent-right
 {
     background: linear-gradient(to right, #b2b2b2 0%, #f9f0e8 2%);
+    max-width: 70%;
 }
 
 .sidebar {
@@ -363,6 +364,11 @@ p, a {
 
 .active-media{
     height: 720px;
+}
+
+.media-list{
+    overflow-x: scroll;
+    white-space: nowrap;   
 }
 
 iframe{
